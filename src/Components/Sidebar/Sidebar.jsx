@@ -21,7 +21,7 @@ const SideBar = () => {
 
   return (
     <div class="md:col-span-1 bg-gray-100 rounded-md p-5">
-      <span class="text-lg font-serif font-bold border-l-2 border-black px-1 ">
+      <span class="text-lg font-serif font-bold border-l-2 border-black px-1">
         Categories:
       </span>
       <div class="py-2">
