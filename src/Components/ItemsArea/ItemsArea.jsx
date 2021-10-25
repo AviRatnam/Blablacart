@@ -30,6 +30,8 @@ const ItemsArea = ({ category, setiteminfo }) => {
                 img={data.image}
                 title={data.title}
                 price={data.price}
+                quantity={data.quantity}
+                id = {data.id}
               />
             </div>
           ))}

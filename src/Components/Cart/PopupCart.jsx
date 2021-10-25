@@ -1,34 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { CartContext } from "../../CartContext";
 
 const PopupCart = () => {
-  const [items, setitems] = useState(null);
-  const [showitems, setshowitems] = useState(false);
+  const [items, setitems] = useContext(CartContext);
+
+  const [quantity, setquantity] = useState(1);
 
   const imagestyle = `col-span-1 h-32 w-40 sm:h-48 object-cover`;
   const deletebutton =
     "mx-2 my-1 bg-red-400 hover:bg-red-300 text-center text-white p-1 max-w-sm rounded-md cursor-pointer";
 
-  const API = "http://localhost:8000/cart";
+  const deleteitem = (remove_id) => {
+    const result = items.filter((item) => item.id !== remove_id);
+    setitems(result);
+  };
 
-  useEffect(() => {
-    fetch(API)
-      .then((res) => res.json())
-      .then((data) => {
-        setitems(data);
-        setshowitems(true);
-      });
-  }, []);
-
-  const deleteitem = (id) => {
-    fetch("http://localhost:8000/cart?id=" + id, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(items)
-    })
-      .then((res) => res.json())
-      .then((res) => console.log(res));
+  const setnewquantity = (newquantity, id) => {
+    try {
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].id === id) {
+          items[i].quantity = newquantity;
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   console.log(items);
@@ -49,34 +45,34 @@ const PopupCart = () => {
           borderColor: "black",
         }}
       >
-        {showitems &&
-          items.map((info, i) => (
-            <div key={i} class="rounded-lg shadow-sm">
-              <div class="p-5 grid grid-cols-3">
-                <img class={imagestyle} src={info.item_img} alt="img" />
-                <div class="my-5 mx-3 col-span-2">
-                  <div class="font-bold text-left mx-2">
-                    {info.item_name}
-                    <div class="my-2">
-                      Quantity:
-                      <input
-                        class="text-center"
-                        type="number"
-                        id="quantity"
-                        name="quantity"
-                        min="1"
-                        max="10"
-                        defaultValue={info.quantity}
-                      />
-                    </div>
+        {items.map((info, i) => (
+          <div key={i} class="rounded-lg shadow-sm">
+            <div class="p-5 grid grid-cols-3">
+              <img class={imagestyle} src={info.item_img} alt="img" />
+              <div class="my-5 mx-3 col-span-2">
+                <div class="font-bold text-left mx-2">
+                  {info.item_name}
+                  <div class="my-2">
+                    Quantity:
+                    <input
+                      class="text-center"
+                      type="number"
+                      id="quantity"
+                      name="quantity"
+                      min="1"
+                      max="10"
+                      defaultValue={quantity}
+                      onChange={(e) => setnewquantity(e.target.value, info.id)}
+                    />
                   </div>
-                  <div class={deletebutton} onClick={() => deleteitem(info.id)}>
-                    Remove
-                  </div>
+                </div>
+                <div class={deletebutton} onClick={() => deleteitem(info.id)}>
+                  Remove
                 </div>
               </div>
             </div>
-          ))}
+          </div>
+        ))}
       </div>
     </div>
   );

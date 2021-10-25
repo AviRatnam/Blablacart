@@ -1,8 +1,37 @@
 import cardclass from "./CardStyles";
+import { useContext } from "react";
+import { CartContext } from "../../CartContext";
 
 const ItemCard = (props) => {
   const imagestyle = `w-full h-32 w-40 sm:h-48 object-cover`;
 
+  const [cart, setcart] = useContext(CartContext);
+
+  const setiteminfo = (...data) => {
+    const temp = 
+      {
+        "item_name":data[0],
+        "price":data[1],
+        "item_img":data[2],
+        "quantity":data[3],
+        "id":data[4]
+      }
+    cart.map(ele => {
+      if(ele.id === data[4]){
+        console.log("Duplicate");
+        return{
+          // ...temp,quantity:ele.quantity+1
+          ...temp,quantity:ele.quantity+1
+        }
+      }
+      else{
+        return temp;
+      }
+    })
+    console.log(temp, cart);
+    setcart([...cart,temp]);
+  }
+  
   return (
     <>
       <div class={cardclass}>
@@ -15,7 +44,7 @@ const ItemCard = (props) => {
         </div>
         <div
           class="p-4 font-bold bg-yellow-100 hover:bg-yellow-200"
-          onClick={() => props.setiteminfo(props.title, props.price, props.img)}
+          onClick={() => setiteminfo(props.title, props.price, props.img, props.quantity, props.id)}
         >
           Add to Cart
         </div>
