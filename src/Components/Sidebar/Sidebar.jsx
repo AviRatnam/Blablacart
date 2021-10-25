@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import ItemsArea from "../ItemsArea/ItemsArea";
 import categorystyles from "./CategoryStyles";
 
-const SideBar = ({setiteminfo}) => {
+const SideBar = () => {
   const API = "https://fakestoreapi.com/products/categories";
 
   const [categories, setcategories] = useState(null);
   const [showcategories, setshowcategories] = useState(false);
   const [selectedcategory, setselectedcategory] = useState("jewelery");
+  const [iteminfo, setiteminfo] = useState(false);
 
 
   useEffect(() => {
