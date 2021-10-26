@@ -5,14 +5,14 @@ const ItemsArea = ({ category, setiteminfo }) => {
   const API = "https://fakestoreapi.com/products/category/";
 
   const [items, setitems] = useState(null);
-  const [showitems, setshowitems] = useState(false);
+  const [showitems, setshowitems] = useState(true);
 
   useEffect(() => {
     fetch(API + category.selectedcategory)
       .then((res) => res.json())
       .then((data) => {
         setitems(data);
-        setshowitems(true);
+        setshowitems(false);
       });
   }, [category.selectedcategory]);
 
@@ -22,7 +22,11 @@ const ItemsArea = ({ category, setiteminfo }) => {
         Showing results for {category.selectedcategory}
       </span>
       <div class="md:grid grid-cols-3 gap-5 py-3">
-        {showitems &&
+        {showitems ? (
+          <div>
+            <div class="font-bold">Loading...</div>
+          </div>
+        ) : (
           items.map((data, i) => (
             <div key={i}>
               <ItemCard
@@ -30,11 +34,12 @@ const ItemsArea = ({ category, setiteminfo }) => {
                 img={data.image}
                 title={data.title}
                 price={data.price}
-                quantity={data.quantity}
-                id = {data.id}
+                quantity={1}
+                id={data.id}
               />
             </div>
-          ))}
+          ))
+        )}
       </div>
     </div>
   );

@@ -6,7 +6,7 @@ import { useContext, useState } from "react";
 import { CartContext } from "../../CartContext";
 
 const Cart = () => {
-  const [cartdata, setcartdata] = useContext(CartContext);
+  const {cartdata, setcartdata} = useContext(CartContext);
   const [showcartitems, setshowcartitems] = useState(false);
 
   return (
@@ -15,7 +15,7 @@ const Cart = () => {
         {showcartitems && <PopupCart />}
       </div>
       <div class={cartstyles} onClick={() => setshowcartitems(!showcartitems)}>
-        <ItemCounter amount={cartdata.length} />
+        <ItemCounter amount={cartdata?.length} />
         <CartIcon />
         <span>Cart</span>
       </div>

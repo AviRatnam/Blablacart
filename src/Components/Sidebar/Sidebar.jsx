@@ -6,17 +6,16 @@ const SideBar = () => {
   const API = "https://fakestoreapi.com/products/categories";
 
   const [categories, setcategories] = useState(null);
-  const [showcategories, setshowcategories] = useState(false);
+  const [showcategories, setshowcategories] = useState(true);
   const [selectedcategory, setselectedcategory] = useState("jewelery");
   const [iteminfo, setiteminfo] = useState(false);
-
 
   useEffect(() => {
     fetch(API)
       .then((res) => res.json())
       .then((data) => {
         setcategories(data);
-        setshowcategories(true);
+        setshowcategories(false);
       });
   }, []);
 
@@ -29,7 +28,11 @@ const SideBar = () => {
           Categories:
         </span>
         <div class="py-2">
-          {showcategories &&
+          {showcategories ? (
+            <div>
+              <div class="font-bold">Loading...</div>
+            </div>
+          ) : (
             categories.map((data, i) => (
               <div
                 key={i}
@@ -38,10 +41,15 @@ const SideBar = () => {
               >
                 <span>- {data}</span>
               </div>
-            ))}
+            ))
+          )}
         </div>
       </div>
-      <ItemsArea category={{selectedcategory,showcategories}} changecategrory={setselectedcategory} setiteminfo={setiteminfo} />
+      <ItemsArea
+        category={{ selectedcategory, showcategories }}
+        changecategrory={setselectedcategory}
+        setiteminfo={setiteminfo}
+      />
     </>
   );
 };
