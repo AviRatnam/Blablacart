@@ -1,37 +1,48 @@
 import cardclass from "./CardStyles";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "../../CartContext";
+import CartPopup from "./ItemPopup";
 
 const ItemCard = (props) => {
   const imagestyle = `w-full h-32 w-40 sm:h-48 object-cover`;
 
-  const [cart, setcart] = useContext(CartContext);
+  const { cartdata, setcartdata } = useContext(CartContext);
 
   const setiteminfo = (...data) => {
-    const temp = 
-      {
-        "item_name":data[0],
-        "price":data[1],
-        "item_img":data[2],
-        "quantity":data[3],
-        "id":data[4]
-      }
-    cart.map(ele => {
-      if(ele.id === data[4]){
+    console.log(data[3]);
+    const temp = {
+      item_name: data[0],
+      price: data[1],
+      item_img: data[2],
+      quantity: data[3],
+      id: data[4],
+    };
+    let flag = 0;
+
+    const newcartdata = cartdata.map((ele) => {
+      console.log(ele.id, data[4]);
+      if (ele.id === data[4]) {
         console.log("Duplicate");
-        return{
+        flag = 1;
+        console.log(ele.quantity);
+
+        return {
           // ...temp,quantity:ele.quantity+1
-          ...temp,quantity:ele.quantity+1
-        }
+          ...temp,
+          quantity: ele.quantity + 1,
+        };
+      } else {
+        return ele;
       }
-      else{
-        return temp;
-      }
-    })
-    console.log(temp, cart);
-    setcart([...cart,temp]);
-  }
-  
+    });
+    console.log(newcartdata);
+    if (flag === 1) {
+      setcartdata([...newcartdata]);
+    } else {
+      setcartdata([...newcartdata, temp]);
+    }
+  };
+
   return (
     <>
       <div class={cardclass}>
@@ -44,7 +55,15 @@ const ItemCard = (props) => {
         </div>
         <div
           class="p-4 font-bold bg-yellow-100 hover:bg-yellow-200"
-          onClick={() => setiteminfo(props.title, props.price, props.img, props.quantity, props.id)}
+          onClick={() =>
+            setiteminfo(
+              props.title,
+              props.price,
+              props.img,
+              props.quantity,
+              props.id
+            )
+          }
         >
           Add to Cart
         </div>
